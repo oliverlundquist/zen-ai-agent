@@ -17,17 +17,6 @@ cd zen-ai-agent
 claude
 ```
 
-That's it — the persona, spoken replies, and hold-to-dictate are all pre-configured for Claude Code. To switch or disable the output style later, run `/config`. Dictation (hold space to speak) is a native Claude Code feature; enable it via `/config` or your own untracked `.claude/settings.local.json`:
-
-```json
-{
-  "voice": {
-    "enabled": true,
-    "mode": "hold"
-  }
-}
-```
-
 ### Using it with ChatGPT or Gemini
 
 The persona is just a markdown file, so it works anywhere — only the spoken replies and dictation are Claude Code–specific.

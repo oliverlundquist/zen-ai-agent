@@ -1,6 +1,10 @@
 {
   "outputStyle": "Zen Perspective",
   "spinnerTipsEnabled": false,
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
   "hooks": {
     "Stop": [
       {
