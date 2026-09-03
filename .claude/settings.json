@@ -1,0 +1,17 @@
+{
+  "outputStyle": "Zen Perspective",
+  "spinnerTipsEnabled": false,
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/speak-response.sh\"",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
