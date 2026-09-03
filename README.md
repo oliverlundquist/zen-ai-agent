@@ -2,40 +2,22 @@
 
 Turns Claude into someone you'd actually call for advice — the way you'd call a close friend, a parent, or your wise old grandpa when you needed to talk something through. Not a chatbot answering questions. A person, grounded in the teachings of Shunryu Suzuki, Kosho Uchiyama, Dainin Katagiri, Kobun Chino Otogawa, Thich Nhat Hanh, and Pema Chödrön, who also happens to know a lot about Traditional Chinese Medicine and Yakuzen (Japanese medicinal cuisine) — so when a question touches the body, energy, food, or the seasons, that knowledge shows up too.
 
-To make the "calling someone" feeling real, two things are built in on top of the persona itself:
-
-- **It talks back.** Every reply is read aloud on macOS using the `say` command, so it feels like an actual conversation and not a wall of text.
-- **You can talk to it.** Hold the space bar to dictate your question instead of typing it, using Claude Code's built-in voice input.
+Real self-harm risk or acute medical emergencies always get a direct, non-roleplay response pointing to crisis lines or emergency services — never a Zen story.
 
 ## How it works
 
-- **The persona** lives in a single markdown file, [`.claude/output-styles/zen-perspective.md`](.claude/output-styles/zen-perspective.md) ([raw version](https://raw.githubusercontent.com/oliverlundquist/zen-ai-agent/main/.claude/output-styles/zen-perspective.md)), set as this project's default [output style](https://code.claude.com/docs/en/output-styles). It's what actually shapes the voice: warm, direct, no headers or bullet lists, no stage directions, drawing on real teachings and biographies rather than generic "Buddhism says..." paraphrase — and reaching for TCM and Yakuzen only when the topic genuinely calls for it, not as decoration.
-- **Spoken replies** are handled by a `Stop` hook ([`.claude/hooks/speak-response.sh`](.claude/hooks/speak-response.sh)) that strips markdown from Claude's response and pipes it through `say` in the background, so it doesn't hold up your next question. This only works on macOS, since `say` is a macOS command. Turn it off with `/speak-off` and back on with `/speak-on` — both just flip an `SPEAK_RESPONSES` env var in the untracked `.claude/settings.local.json`, so the toggle is per-machine and never touches the shared, committed settings.
-- **Dictation** uses Claude Code's own voice input feature, set to "hold" mode — hold space, speak your question, let go, and it's transcribed into the prompt. This is a native Claude Code capability, not something this repo builds; the repo just documents the setting to turn on.
-- **Crisis safety** is hard-wired into the persona ahead of everything else: real self-harm risk or acute medical emergencies get a direct, non-roleplay response pointing to crisis lines or emergency services, not a Zen story.
+- **You talk to it.** Hold space to dictate your question instead of typing, using Claude Code's built-in voice input.
+- **It talks back.** On macOS, replies are read aloud via the `say` command — toggle with `/speak-off` / `/speak-on`.
 
 ## Getting started
-
-Clone the repository:
 
 ```bash
 git clone https://github.com/oliverlundquist/zen-ai-agent.git
 cd zen-ai-agent
-```
-
-### Using it with Claude Code
-
-This repo ships a `.claude/settings.json` that already sets the Zen persona as the default output style, plus the `Stop` hook that speaks replies aloud. Just open the folder with Claude Code and start asking questions:
-
-```bash
 claude
 ```
 
-No extra setup needed for the persona or spoken replies — the moment Claude Code starts a session in this directory, it responds in character and, on macOS, speaks the answer. To switch output styles later (or turn this one off), run `/config` and pick a different style from the menu.
-
-**Spoken replies:** on by default, macOS only. Run `/speak-off` any time you'd rather read than listen, and `/speak-on` to bring the voice back.
-
-**Dictation:** to hold space and speak your question instead of typing it, turn on Claude Code's voice input — either through `/config`, or by adding this to your own untracked `.claude/settings.local.json`:
+That's it — the persona, spoken replies, and hold-to-dictate are all pre-configured for Claude Code. To switch or disable the output style later, run `/config`. Dictation (hold space to speak) is a native Claude Code feature; enable it via `/config` or your own untracked `.claude/settings.local.json`:
 
 ```json
 {
@@ -46,17 +28,13 @@ No extra setup needed for the persona or spoken replies — the moment Claude Co
 }
 ```
 
-This setting is personal to your machine, so it isn't checked into the repo — everyone who clones this sets it up (or not) for themselves.
-
 ### Using it with ChatGPT or Gemini
 
-The persona itself is designed for Claude, but it's just a markdown file — nothing Claude-specific about its content. The spoken-reply hook and hold-to-dictate input are Claude Code features and won't carry over, but the character will. To enable "Zen mode" elsewhere:
+The persona is just a markdown file, so it works anywhere — only the spoken replies and dictation are Claude Code–specific.
 
-**Raw file:** https://raw.githubusercontent.com/oliverlundquist/zen-ai-agent/main/.claude/output-styles/zen-perspective.md
-
-1. Open the raw link above.
-2. Attach/upload the downloaded file to your conversation, **or** copy-paste its contents directly into the chat.
-3. Ask the assistant to adopt the persona and follow the instructions in the file for the rest of the conversation (in ChatGPT, this also works well pasted into a Custom GPT's or Project's instructions; in Gemini, a Gem's instructions).
+1. Open the raw file: https://raw.githubusercontent.com/oliverlundquist/zen-ai-agent/main/.claude/output-styles/zen-perspective.md
+2. Attach it or paste its contents into your conversation.
+3. Ask the assistant to adopt the persona for the rest of the conversation (works well as a Custom GPT's/Project's instructions in ChatGPT, or a Gem's instructions in Gemini).
 
 ## Sample questions to ask
 
@@ -160,8 +138,8 @@ Fun prompts to get a conversation going. You don't have to copy one by hand — 
 
 ## Limitations
 
-- **No word-by-word hook.** Claude Code doesn't currently expose a hook that fires as the response streams in — the only hook available (`Stop`) fires once the full reply has finished generating. That's why speech can't start until the whole response is done: there's no way to hand `say` each sentence as it's written, so the entire answer has to land first before playback begins.
-- **The voice is a bit robotic.** `say` is macOS's built-in text-to-speech, not a natural-sounding neural voice, so the read-aloud experience doesn't feel as smooth or lifelike as the "calling a friend" framing aims for.
+- **No word-by-word hook.** Claude Code's `Stop` hook only fires after the full reply is generated, so speech can't start until the whole response is done.
+- **The voice is a bit robotic.** `say` is macOS's built-in text-to-speech, not a natural-sounding neural voice.
 
 ## Disclaimer
 
@@ -169,4 +147,4 @@ The Zen persona offers Zen philosophy, TCM, and Yakuzen wisdom for general refle
 
 ## License
 
-Released under the [MIT License](LICENSE) — see the `LICENSE` file for the full text. In short: free to use, copy, modify, and distribute, including commercially, with no warranty.
+Released under the [MIT License](LICENSE) — see the `LICENSE` file for full text. Free to use, copy, modify, and distribute, including commercially, with no warranty.
